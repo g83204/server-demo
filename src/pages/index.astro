@@ -1,0 +1,212 @@
+---
+// 這個頁面每次訪問都會在伺服器端重新生成！
+const currentTime = new Date().toLocaleString('zh-TW', {
+  timeZone: 'Asia/Taipei',
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+  hour: '2-digit',
+  minute: '2-digit',
+  second: '2-digit'
+});
+
+// 模擬從資料庫讀取資料
+const visitCount = Math.floor(Math.random() * 1000) + 1;
+
+// 取得使用者資訊
+const userAgent = Astro.request.headers.get('user-agent') || '未知';
+const ip = Astro.clientAddress || '未知';
+---
+
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Server 模式示範</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    
+    .container {
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 600px;
+      width: 100%;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    
+    h1 {
+      color: #667eea;
+      margin-bottom: 10px;
+      font-size: 2em;
+    }
+    
+    .subtitle {
+      color: #666;
+      margin-bottom: 30px;
+      font-size: 0.9em;
+    }
+    
+    .info-card {
+      background: #f8f9fa;
+      border-left: 4px solid #667eea;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 8px;
+    }
+    
+    .info-card h2 {
+      color: #333;
+      font-size: 1.2em;
+      margin-bottom: 10px;
+    }
+    
+    .info-card p {
+      color: #666;
+      line-height: 1.6;
+    }
+    
+    .highlight {
+      background: #fff3cd;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: bold;
+      color: #856404;
+    }
+    
+    .badge {
+      display: inline-block;
+      background: #667eea;
+      color: white;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 0.85em;
+      margin-top: 10px;
+    }
+    
+    .comparison {
+      margin-top: 30px;
+      padding-top: 30px;
+      border-top: 2px solid #e9ecef;
+    }
+    
+    .comparison h3 {
+      color: #333;
+      margin-bottom: 15px;
+    }
+    
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-top: 15px;
+    }
+    
+    .comparison-item {
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+    }
+    
+    .static {
+      background: #d4edda;
+      border: 2px solid #28a745;
+    }
+    
+    .server {
+      background: #cce5ff;
+      border: 2px solid #004085;
+    }
+    
+    .comparison-item h4 {
+      margin-bottom: 8px;
+      font-size: 1em;
+    }
+    
+    .comparison-item p {
+      font-size: 0.9em;
+      color: #666;
+    }
+    
+    button {
+      background: #667eea;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1em;
+      margin-top: 20px;
+      width: 100%;
+      transition: background 0.3s;
+    }
+    
+    button:hover {
+      background: #5568d3;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🚀 Server 模式示範</h1>
+    <p class="subtitle">這個頁面使用 Astro Server 模式，每次訪問都會重新生成</p>
+    
+    <div class="info-card">
+      <h2>⏰ 當前伺服器時間</h2>
+      <p>這個時間是在<span class="highlight">伺服器端</span>生成的：</p>
+      <p style="font-size: 1.5em; color: #667eea; margin-top: 10px;">
+        {currentTime}
+      </p>
+      <span class="badge">每次重新整理都會更新</span>
+    </div>
+    
+    <div class="info-card">
+      <h2>👥 訪客資訊</h2>
+      <p><strong>訪問次數：</strong> <span class="highlight">{visitCount}</span></p>
+      <p style="margin-top: 10px;"><strong>您的 IP：</strong> {ip}</p>
+      <p style="margin-top: 5px; font-size: 0.85em; color: #999;">
+        瀏覽器：{userAgent.substring(0, 50)}...
+      </p>
+    </div>
+    
+    <div class="comparison">
+      <h3>💡 Static vs Server 模式對比</h3>
+      <div class="comparison-grid">
+        <div class="comparison-item static">
+          <h4>Static 模式</h4>
+          <p>時間固定在建置時</p>
+          <p>所有人看到一樣</p>
+        </div>
+        <div class="comparison-item server">
+          <h4>Server 模式</h4>
+          <p>即時生成</p>
+          <p>每次都不同</p>
+        </div>
+      </div>
+    </div>
+    
+    <button onclick="location.reload()">
+      🔄 重新整理看看時間變化
+    </button>
+    
+    <button onclick="fetch('/api/time').then(r => r.json()).then(data => alert('API 回傳：' + data.time))" style="margin-top: 10px; background: #28a745;">
+      📡 測試 API 路由
+    </button>
+  </div>
+</body>
+</html>

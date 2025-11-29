@@ -1,0 +1,14 @@
+{
+    "name": "server-demo",
+    "type": "module",
+    "version": "0.0.1",
+    "scripts": {
+        "dev": "astro dev --port 3000",
+        "build": "astro build",
+        "preview": "astro preview"
+    },
+    "dependencies": {
+        "@astrojs/node": "^8.0.0",
+        "astro": "^4.16.7"
+    }
+}
